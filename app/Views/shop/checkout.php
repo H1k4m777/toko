@@ -33,11 +33,11 @@
                     </div>
                     <div class="col-lg-12">
                         <label for="street">Alamat<span>*</span></label>
-                        <input type="text" id="alamat" name="alamat" class="street-first">
+                        <input type="text" id="alamat" name="alamat" class="street-first" required>
                     </div>
                     <div class="col-lg-12">
                         <label for="town">Provinsi<span>*</span></label>
-                        <select class="form-control" id="provinsi">
+                        <select class="form-control" id="provinsi" required>
                             <option>Pilih Provinsi</option>
                             <?php foreach ($provinsi as $p) : ?>
                                 <option value="<?= $p->province_id ?>"><?= $p->province ?></option>
@@ -46,13 +46,13 @@
                     </div>
                     <div class="col-lg-12">
                         <label for="town">Kabupaten/Kota<span>*</span></label>
-                        <select class="form-control" id="kabupaten">
+                        <select class="form-control" id="kabupaten" required>
                             <option>Pilih Kabupaten/kota</option>
                         </select>
                     </div>
                     <div class="col-lg-12">
                         <label for="town">Layanan<span>*</span></label>
-                        <select class="form-control" id="service">
+                        <select class="form-control" id="service" required>
                             <option>Pilih Layanan</option>
                         </select>
                     </div>
@@ -81,8 +81,20 @@
                                 endforeach;
                             endif;
                             ?>
-                            <li class="fw-normal">Subtotal <span><?php echo number_to_currency($total, 'IDR') ?></span></li>
-                            <li class="total-price">Total <span id="total"><?php echo number_to_currency($total, 'IDR') ?></span></li>
+                            <?php if ($diskon) :
+                                foreach ($diskon as $diskon) : ?>
+                                    <li class="fw-normal">Subtotal <span><?php echo number_to_currency($total, 'IDR') ?></span></li>
+                                    <li class="fw-normal">Diskon <span><?= $diskon['diskon'] ?>%</span></li>
+                                    <?php
+                                    $besarDiskon = ($total * $diskon['diskon']) / 100;
+                                    $hargaSetelahDiskon = $total - $besarDiskon;
+                                    ?>
+                                    <li class="total-price">Total <span id="total"><?php echo number_to_currency($hargaSetelahDiskon, 'IDR') ?></span></li>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <li class="fw-normal">Subtotal <span><?php echo number_to_currency($total, 'IDR') ?></span></li>
+                                <li class="total-price">Total <span id="total"><?php echo number_to_currency($total, 'IDR') ?></span></li>
+                            <?php endif; ?>
                         </ul>
                         <div class="order-btn">
                             <button type="submit" class="site-btn place-btn">Place Order</button>
@@ -155,7 +167,7 @@
         $("#service").on('change', function() {
             var estimasi = $('option:selected', this).attr('etd');
             ongkir = parseInt($(this).val());
-            var total = ongkir + <?= $total ?>;
+            var total = ongkir + <?= $hargaSetelahDiskon ?? $total ?>;
             $("#ongkir").val(ongkir);
             $("#estimasi").html(estimasi + " Hari");
             $("#total").html("IDR " + total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));

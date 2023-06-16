@@ -56,7 +56,7 @@ class Barang extends Migration
         $this->forge->createTable('barang');
 
         $this->forge->addColumn('barang', [
-            'CONSTRAINT barang_id_kategori_foreign FOREIGN KEY(id_kategori) REFERENCES kategori(id) ON DELETE NO ACTION ON UPDATE CASCADE',
+            'CONSTRAINT barang_id_kategori_foreign FOREIGN KEY(id_kategori) REFERENCES kategori(id) ON DELETE NO ACTION ON UPDATE NO ACTION',
         ]);
     }
 

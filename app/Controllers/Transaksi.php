@@ -44,6 +44,8 @@ class Transaksi extends BaseController
 
                 $barangModel = new \App\Models\BarangModel();
 
+                $masterDiskonModel = new \App\Models\MasterDiskonModel();
+
                 $dataForm = [
                     'id_user' => $this->request->getPost('id_user'),
                     'total_harga' => $this->request->getPost('total_harga'),
@@ -58,15 +60,29 @@ class Transaksi extends BaseController
 
                 $last_insert_id = $transaksiModel->getInsertID();
 
+                $tanggalHariIni = date('Y-m-d');
+                $diskon = $masterDiskonModel
+                    ->where('tanggal_mulai <=', $tanggalHariIni)
+                    ->where('tanggal_selesai >=', $tanggalHariIni)
+                    ->findAll();
+                if ($diskon) {
+                    foreach ($diskon as $diskon) {
+                        $diskon = $diskon['diskon'];
+                    }
+                } else {
+                    $diskon = 0;
+                }
+
                 foreach ($this->cart->contents() as $value) {
                     $dataFormDetail = [
                         'id_transaksi' => $last_insert_id,
                         'id_barang' => $value['id'],
                         'jumlah' => $value['qty'],
-                        'diskon' => 0,
+                        'diskon' => $diskon,
                         'subtotal_harga' => $value['qty'] * $value['price'],
                         'created_by' => $this->request->getPost('id_user'),
                         'created_date' => date("Y-m-d H:i:s")
+                        //,'penunjuk' => $last_insert_id
                     ];
 
                     $transaksiDetailModel->insert($dataFormDetail);
@@ -76,9 +92,9 @@ class Transaksi extends BaseController
 
                 return redirect()->to('transaction');
             }
-            $this->session->setFlashdata('errors', $errors);
         }
     }
+
 
     public function invoice()
     {
@@ -90,13 +106,17 @@ class Transaksi extends BaseController
         $transaksiDetailModel = new \App\Models\TransaksiDetailModel();
         $transaksiDetail = $transaksiDetailModel->select('transaksi_detail.*, barang.nama')->join('barang', 'transaksi_detail.id_barang=barang.id')->where('id_transaksi', $id)->findAll();
 
+        $transaksiDiskon = $transaksiDetailModel->select('diskon')->where('id_transaksi', $id)->first();
+        $diskon = $transaksiDiskon->diskon;
+
         $userModel = new \App\Models\UserModel();
         $pembeli = $userModel->find($transaksi->id_user);
 
         $html = view('transaksi/invoice', [
             'transaksi' => $transaksi,
             'transaksiDetail' => $transaksiDetail,
-            'pembeli' => $pembeli
+            'pembeli' => $pembeli,
+            'diskon' => $diskon
         ]);
 
         $filename = date('y-m-d-H-i-s') . '-invoice';

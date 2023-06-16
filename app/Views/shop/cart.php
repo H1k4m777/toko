@@ -63,6 +63,11 @@
                         </tbody>
                     </table>
                 </div>
+                <?php if ($diskon) : ?>
+                    <h4>terdapat diskon hari ini</h4>
+                <?php else : ?>
+                    <h4>tidak ada diskon hari ini</h4>
+                <?php endif; ?>
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="cart-buttons">
@@ -75,7 +80,14 @@
                         <div class="proceed-checkout">
                             <ul>
                                 <li class="subtotal">Subtotal <span><?php echo number_to_currency($total, 'IDR') ?></span></li>
-                                <li class="cart-total">Total <span><?php echo number_to_currency($total, 'IDR') ?></span></li>
+                                <?php foreach ($diskon as $diskon) : ?>
+                                    <li class="subtotal">Diskon <span><?= $diskon['diskon'] ?>%</span></li>
+                                    <?php
+                                    $besarDiskon = ($total * $diskon['diskon']) / 100;
+                                    $hargaSetelahDiskon = $total - $besarDiskon;
+                                    ?>`
+                                    <li class="cart-total">Total <span><?php echo number_to_currency($hargaSetelahDiskon, 'IDR') ?></span></li>
+                                <?php endforeach; ?>
                             </ul>
                             <a href="<?= site_url('shop/checkout') ?>" class="proceed-btn">PROCEED TO CHECK OUT</a>
                         </div>

@@ -45,7 +45,7 @@ class Komentar extends Migration
         $this->forge->createTable('komentar');
 
         $this->forge->addColumn('komentar', [
-            'CONSTRAINT komentar_id_transaksi_detail_foreign FOREIGN KEY(id_transaksi_detail) REFERENCES transaksi_detail(id) ON DELETE NO ACTION ON UPDATE CASCADE',
+            'CONSTRAINT komentar_id_transaksi_detail_foreign FOREIGN KEY(id_transaksi_detail) REFERENCES transaksi_detail(id) ON DELETE NO ACTION ON UPDATE NO ACTION',
         ]);
     }
 

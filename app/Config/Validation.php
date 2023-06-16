@@ -103,4 +103,10 @@ class Validation extends BaseConfig
             'required' => '{field} Harus Diisi',
         ]
     ];
+
+    public $komentar = [
+        'komentar' => [
+            'rules' => 'required',
+        ],
+    ];
 }

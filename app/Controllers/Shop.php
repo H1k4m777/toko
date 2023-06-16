@@ -64,6 +64,19 @@ class Shop extends BaseController
     {
         $data['items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
+
+        // Ambil tanggal hari ini
+        $tanggalHariIni = date('Y-m-d');
+
+        // Ambil data diskon dari tabel master_diskon yang berlaku untuk hari ini
+        $masterDiskonModel = new \App\Models\MasterDiskonModel();
+        $diskon = $masterDiskonModel
+            ->where('tanggal_mulai <=', $tanggalHariIni)
+            ->where('tanggal_selesai >=', $tanggalHariIni)
+            ->findAll();
+
+        $data['diskon'] = $diskon;
+
         return view('shop/cart', $data);
     }
 
@@ -114,6 +127,18 @@ class Shop extends BaseController
 
         $provinsi = $this->rajaongkir('province');
         $data['provinsi'] = json_decode($provinsi)->rajaongkir->results;
+
+        // Ambil tanggal hari ini
+        $tanggalHariIni = date('Y-m-d');
+
+        // Ambil data diskon dari tabel master_diskon yang berlaku untuk hari ini
+        $masterDiskonModel = new \App\Models\MasterDiskonModel();
+        $diskon = $masterDiskonModel
+            ->where('tanggal_mulai <=', $tanggalHariIni)
+            ->where('tanggal_selesai >=', $tanggalHariIni)
+            ->findAll();
+
+        $data['diskon'] = $diskon;
 
         return view('shop/checkout', $data);
     }

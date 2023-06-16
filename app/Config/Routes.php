@@ -38,8 +38,8 @@ $routes->get('logout', 'Auth::logout');
 $routes->get('shop', 'Shop::index');
 $routes->get('shop/category/(:segment)', 'Shop::category/$1');
 $routes->get('shop/product/(:segment)', 'Shop::product/$1');
+$routes->get('cart', 'Shop::cart_show', ['filter' => 'auth']);
 $routes->get('shop/cart', 'Shop::cart_show', ['filter' => 'auth']);
-$routes->get('cart', 'Shop::cart_show', ['filter' => 'auth']); //buat cart update
 $routes->add('shop/add', 'Shop::cart_add', ['filter' => 'auth']);
 $routes->add('shop/edit', 'Shop::cart_edit', ['filter' => 'auth']);
 $routes->get('shop/delete/(:any)', 'Shop::cart_delete/$1', ['filter' => 'auth']);
@@ -50,7 +50,8 @@ $routes->get('shop/getcost', 'Shop::getcost', ['filter' => 'auth']);
 $routes->get('transaction', 'Transaksi::index', ['filter' => 'auth']);
 $routes->get('invoice/(:segment)', 'Transaksi::invoice', ['filter' => 'auth']);
 $routes->add('buy', 'Transaksi::buy', ['filter' => 'auth']);
-
+$routes->add('komentar/create', 'Komentar::create', ['filter' => 'auth']);
+$routes->get('contact', 'Home::contact');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

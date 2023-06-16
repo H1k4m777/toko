@@ -54,6 +54,10 @@
             <td><?= "Rp " . number_format($transaksi->ongkir, 2, ',', '.') ?></td>
         </tr>
         <tr>
+            <td colspan="2">Diskon</td>
+            <td><?= $diskon ?>%</td>
+        </tr>
+        <tr>
             <td colspan="2">Total Harga</td>
             <td><?= "Rp " . number_format($transaksi->total_harga, 2, ',', '.') ?></td>
         </tr>

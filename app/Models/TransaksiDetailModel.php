@@ -9,7 +9,7 @@ class TransaksiDetailModel extends Model
     protected $table = 'transaksi_detail';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'id_tansaksi', 'id_barang', 'jumlah', 'diskon', 'subtotal_harga', 'created_date', 'created_by', 'updated_date', 'updated_by'
+        'id_transaksi', 'id_barang', 'jumlah', 'diskon', 'subtotal_harga', 'created_date', 'created_by', 'updated_date', 'updated_by', 'penunjuk'
     ];
     protected $returnType = 'object';
     protected $useTimestamps = false;

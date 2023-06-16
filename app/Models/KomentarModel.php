@@ -12,4 +12,5 @@ class KomentarModel extends Model
         'id_transaksi_detail', 'komentar', 'created_date', 'created_by', 'updated_date', 'updated_by'
     ];
     protected $returnType = 'object';
+    protected $useTimestamps = false;
 }

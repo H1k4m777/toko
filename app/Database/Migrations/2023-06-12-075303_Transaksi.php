@@ -57,7 +57,7 @@ class Transaksi extends Migration
         $this->forge->createTable('transaksi');
 
         $this->forge->addColumn('transaksi', [
-            'CONSTRAINT transaksi_id_user_foreign FOREIGN KEY(id_user) REFERENCES user(id) ON DELETE NO ACTION ON UPDATE CASCADE',
+            'CONSTRAINT transaksi_ud_pembeli FOREIGN KEY(id_user) REFERENCES user(id) ON DELETE NO ACTION ON UPDATE NO ACTION',
         ]);
     }
 
